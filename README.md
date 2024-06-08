@@ -1,1 +1,2 @@
-# electronics-world-backend
+# Electronics World
+Backend component of the application
