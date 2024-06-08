@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "a6bbe634-262b-4403-a280-36eaf53c71fc",
+		"name": "Electronics-world",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17003363"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "GetUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backendHostURL}}/api/v1/users/getUsers",
+							"host": [
+								"{{backendHostURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"getUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addUsers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backendHostURL}}/api/v1/users/addUsers",
+							"host": [
+								"{{backendHostURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"addUsers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "deploy",
+			"item": [
+				{
+					"name": "Root URL - readme",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backendHostURL}}",
+							"host": [
+								"{{backendHostURL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
