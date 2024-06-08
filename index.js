@@ -6,6 +6,7 @@ import db from "./mongoConnection.js";
 const port = process.env.PORT || 4000;
 const app = express();
 import cors from 'cors'
+import fs from 'fs'
 app.use(cors())
 // app.use((_req, res, next) => {
 //     res.header('Access-Control-Allow-Origin', '*');
@@ -21,7 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.send('Hello World, from express after rename');
+    const readme = fs.readFileSync('./README.md' , 'utf-8')
+    res.send(readme);
 })
 
 app.post('/addUser',async (req, res) => {
