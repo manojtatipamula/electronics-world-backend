@@ -26,7 +26,6 @@ const addUsers = async (req, res, next) => {
        next(e)
     }
 }
-
 module.exports = {
     getUsers,
     addUsers
