@@ -3,3 +3,4 @@ Backend component of the application
 
 # Changelog
 - update the github workflow
+- add develop branch
