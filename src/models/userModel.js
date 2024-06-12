@@ -1,48 +1,34 @@
 const mongoose = require('mongoose');
+const helpers = require('../helpers');
 
-/* const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
     unique: true,
-    trim: true,
-    lowercase: true
   },
   password: {
     type: String,
     required: true,
-    minlength: 6
   },
-  // Add other user specific fields if needed (e.g., address, phone number)
-}); */
+  first_name: {
+    type: String,
+  },
+  last_name: {
+    type: String,
+  },
+  // Add any other user details you want to store
+  // e.g., address, phone number, etc.
+}, { timestamps: true });
 
-// Optional: Hash password before saving (security best practice)
-// userSchema.pre('save', async function(next) {
-//   // Implement password hashing logic here (using bcryptjs or similar)
-//   next();
-// });
+// Hash password before saving the user
+userSchema.pre('save', async (next) => {
+  if (this.isNew || this.isModified('password')) {
+    this.password = await helpers.hashPassword(this.password);
+  }
+  next();
+});
 
-// "_id","first_name","last_name","email","date","userName"
-// const userSchema = new mongoose.Schema({
-//     first_name: {
-//         type: 'String'
-//     },
-//     last_name: {
-//         type: 'String'
-//     },
-//     email: {
-//         type: 'String'
-//     },
-//     user_name: {
-//         type: 'String'
-//     }
-// })
+// const userSchema = new mongoose.Schema({}, {strict : false})
 
-const userSchema = new mongoose.Schema({}, {strict : false})
-
-module.exports = mongoose.model('User', userSchema, "users");
+module.exports = mongoose.model('User', userSchema, 'users');

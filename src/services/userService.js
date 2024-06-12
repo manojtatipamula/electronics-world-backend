@@ -1,21 +1,37 @@
-const userModel = require('../models/userModel')
-const getUsers = async () => {
-    try {
-        // implement pagination
-        return await userModel.find()
-    } catch (e) {
-        throw e
-    }
-}
+const UserModel = require('../models/userModel');
 
-const addUsers = async (data)=>{
-    try {
-        return await userModel.insertMany(data)
-    } catch (e) {
-        throw e
-    }
-}
+const getUser = async (data) => {
+  try {
+    // implement pagination
+    const selectionCriteria = {
+      email: data?.email
+    };
+    return await UserModel.findOne(selectionCriteria);
+  } catch (e) {
+    throw e;
+  }
+};
+
+const addUser = async (data) => {
+  try {
+    const newUser = new UserModel(data);
+    const result = await newUser.save();
+    return result;
+  } catch (e) {
+    throw e;
+  }
+};
+
+const getAll = async () => {
+  try {
+    return await UserModel.find({}).exec();
+  } catch (e) {
+    throw e;
+  }
+};
+
 module.exports = {
-    getUsers,
-    addUsers
-}
+  getUser,
+  addUser,
+  getAll
+};
