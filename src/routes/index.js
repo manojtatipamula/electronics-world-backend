@@ -1,8 +1,8 @@
-const userRouter = require('./userRoutes')
-const stripeRouter = require('./stripeRoutes')
-const router = require('express').Router()
+const router = require('express').Router();
+const userRouter = require('./userRoutes');
+const stripeRouter = require('./stripeRoutes');
 
-router.use('/users', userRouter)
-router.use('/stripe', stripeRouter)
+router.use('/users', userRouter);
+router.use('/stripe', stripeRouter);
 
-module.exports = router
+module.exports = router;
