@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Hash password before saving the user
-userSchema.pre('save', async (next) => {
+userSchema.pre('save', async function (next) {
   if (this.isNew || this.isModified('password')) {
     this.password = await helpers.hashPassword(this.password);
   }
