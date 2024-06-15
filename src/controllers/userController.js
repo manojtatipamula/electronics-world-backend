@@ -3,8 +3,12 @@ const helpers = require('../helpers');
 
 const getUsers = async (req, res, next) => {
   try {
-    const results = await userService.getAll();
-    return res.send(results).status(200);
+    let results = await userService.getAll();
+    const finalRes = {
+      data : results,
+      status : 'success'
+    }
+    return res.send(finalRes).status(200);
   } catch (err) {
     return next(err);
   }
@@ -34,7 +38,7 @@ const login = async (req, res, next) => {
     if (passRes) {
       const encode = {
         email: userData.email,
-        firstName: userData.first_name,
+        first_name: userData.first_name,
         last_name: userData.last_name
       };
       const token = helpers.generateToken(encode);
@@ -47,8 +51,9 @@ const login = async (req, res, next) => {
     return next(err);
   }
 };
+
 module.exports = {
   getUsers,
   register,
-  login
+  login,
 };

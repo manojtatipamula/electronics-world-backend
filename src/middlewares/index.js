@@ -6,21 +6,21 @@ const validateToken = (req, res, next) => {
 
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(403).json({ status: 'failure', message: 'Send Authorization header' });
+      return res.status(401).json({ status: 'failure', message: 'Send Authorization header' });
     }
     const [bearer, token] = authHeader.split(' ');
     if (bearer !== 'Bearer' || !token) {
-      return res.status(403).json({ status: 'failure', message: 'Unauthorized' });
+      return res.status(401).json({ status: 'failure', message: 'Unauthorized' });
     }
     const decoded = helpers.verifyToken(token);
     req.tokenData = decoded?.data;
     return next();
   } catch (e) {
     if (e.name === 'JsonWebTokenError') {
-      return res.status(403).json({ status: 'failure', message: 'Token is not valid' });
+      return res.status(401).json({ status: 'failure', message: 'Token is not valid' });
     }
     if (e.name === 'TokenExpiredError') {
-      return res.status(403).json({ status: 'failure', message: 'TokenExpired' });
+      return res.status(401).json({ status: 'failure', message: 'TokenExpired' });
     }
     return next(e);
   }
