@@ -13,7 +13,7 @@ const validateToken = (req, res, next) => {
       return res.status(401).json({ status: 'failure', message: 'Unauthorized' });
     }
     const decoded = helpers.verifyToken(token);
-    req.tokenData = decoded?.data;
+    req.userData = decoded?.data;
     return next();
   } catch (e) {
     if (e.name === 'JsonWebTokenError') {

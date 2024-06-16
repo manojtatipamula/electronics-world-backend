@@ -9,6 +9,18 @@ const router = require('./routes');
 const port = process.env.PORT || 4000;
 const app = express();
 
+const logger = require('./lib/logger');
+
+app.use((req, res, next) => {
+  logger.info({
+    message: 'HTTP request received',
+    method: req.method,
+    url: req.url,
+    // Add other request details as needed
+  });
+  next();
+});
+
 app.use(cors());
 // Parses the text as url encoded data
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -1,7 +1,7 @@
-
 const stripeLater = async () => {
   try {
-  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    // eslint-disable-next-line global-require
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
     const session = await stripe.checkout.sessions.create({
       success_url: 'http://localhost:4200/payment-complete',
       cancel_url: 'http://localhost:4200/payment-cancel',

@@ -3,7 +3,7 @@ const constants = Object.freeze({
   DB_NAME: 'electronics_world',
   PASSWORD_SALT_ROUNDS: 10,
   JWT_SECRET: 'SUPER_SECRET',
-  JWT_EXPIRY: '12h'
+  JWT_EXPIRY: '30d'
 });
 
 module.exports = constants;
