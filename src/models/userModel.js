@@ -13,16 +13,22 @@ const userSchema = new mongoose.Schema({
   },
   first_name: {
     type: String,
+    required: true
   },
   last_name: {
     type: String,
+    required: true
   },
+  address: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Address',
+  }
   // Add any other user details you want to store
   // e.g., address, phone number, etc.
 }, { timestamps: true });
 
 // Hash password before saving the user
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function preparePassword(next) {
   if (this.isNew || this.isModified('password')) {
     this.password = await helpers.hashPassword(this.password);
   }
