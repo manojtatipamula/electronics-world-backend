@@ -32,7 +32,16 @@ const getAllProductsInventory = async () => {
     throw err;
   }
 };
+const getProductbyID = async (data) => {
+  try {
+    const result = await ProductModel.findById({_id : data._id});
+    return result;
+  } catch (err) {
+    throw err;
+  }
+};
 module.exports = {
   createProductInvetory,
-  getAllProductsInventory
+  getAllProductsInventory,
+  getProductbyID
 };

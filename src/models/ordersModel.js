@@ -17,6 +17,9 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      price: { // Optional: Store order-specific product price if needed
+        type: Number,
+      },
     },
   ],
   total_price: {
@@ -27,14 +30,14 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  payment_status: {
-    type: String,
-    required: true,
-  },
   shipping_address: { // Reference to the address used for shipping
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Address',
+  },
+  payment_details : { // Reference to the address used for shipping
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Payment',
   }
-});
+},{ timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema, 'orders');
