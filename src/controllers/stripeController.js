@@ -32,7 +32,21 @@ const checkStripe = async (req, res, next) => {
     // const items = [[1, {priceInCents: 10000, name: `Learn Stripe Mannnnn`}], [1, {priceInCents: 20000, name: `Learn Nodee Mannnnn`}]]
     // const storeItems = new Map(items)
 
-    const result = await stripeLater();
+    // const result = await stripeLater();
+    const OrderService = require('../services/orderService')
+    const lineItems = [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Samsung S90D'
+          },
+          unit_amount: 50 * 100
+        },
+        quantity: 2,
+      },
+    ]
+    const result = await OrderService.triggerStripe(lineItems)
     res.json({
       name: 'manoj',
       message: `"checking Stripe" ${process.env.STRIPE_SECRET_KEY}`,
