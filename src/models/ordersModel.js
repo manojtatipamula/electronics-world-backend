@@ -37,6 +37,10 @@ const orderSchema = new mongoose.Schema({
   payment_details : { // Reference to the address used for shipping
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Payment',
+  },
+  payment_status : {
+    type: String,
+    default : 'unpaid'
   }
 },{ timestamps: true });
 

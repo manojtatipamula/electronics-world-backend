@@ -10,7 +10,7 @@ const createProductsInventory = async (req, res, next) => {
       status: 'success',
       message: 'PRODUCT_INVENTORY_UPDATED',
       currentUser: currentUser,
-      result: result
+      data: result
     });
   } catch (err) {
     return next(err);
@@ -20,11 +20,16 @@ const createProductsInventory = async (req, res, next) => {
 const getAllProductsInventory = async (req, res, next) => {
   try {
     const currentUser = req.userData;
-    const result = await ProductService.getAllProductsInventory(currentUser);
+    let result = await ProductService.getAllProductsInventory(currentUser);
+    result = result.map((item)=> {
+      item.id = item._id
+      return item
+    })
+    // console.log(result)
     return res.json({
       status: 'success',
       message: 'PRODUCT_INVENTORY_LIST',
-      result: result
+      data: result
     });
   } catch (err) {
     return next(err);

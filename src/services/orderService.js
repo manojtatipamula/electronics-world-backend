@@ -15,8 +15,8 @@ const createOrder = async(payload , currentUser) =>{
       ...payload.shipping_address,
       user_id : currentUser._id
     }
-    const address = new AddressModel(addressData)
-    await address.save()
+    // const address = new AddressModel(addressData)
+    // await address.save()
 
     const productData = await ProductModel.find({ _id : {$in : payload.items.map((item)=> { return new mongoose.Types.ObjectId(item.product_id)}) }})
     const final_pr = []
@@ -31,17 +31,11 @@ const createOrder = async(payload , currentUser) =>{
     }
     const orderData = {
       user_id : currentUser._id,
-      shipping_address : address._id,
       items : final_pr,
       total_price: total_price
     }
     const order  = new OrderModel(orderData)
     await order.save()
-    const data = [{
-      name : "LG C4",
-      quantity : 3,
-      price_in_cents : 4 * 100
-    }]
     const orderSavedData = await getOrderbyID({id : order._id})
     console.log(orderSavedData)
     const final_payment = orderSavedData.items.map((os_data)=>{
@@ -53,8 +47,7 @@ const createOrder = async(payload , currentUser) =>{
     })
     const lineItems = mapLineItems(final_payment)
     const result = {
-      order_id : order._id,
-      address_id : address._id,
+      order_id : order._id
     }
     const stripe_result = await triggerStripe(lineItems)
     // console.log("stripppp, ", lineItems)
@@ -67,6 +60,7 @@ const createOrder = async(payload , currentUser) =>{
     
     await payment.save()
     order.payment_details = payment._id
+    order.payment_status = stripe_result?.payment_information?.payment_status
     await order.save()
     return result
   }catch(err){
@@ -80,7 +74,7 @@ const getAllOrders = async (payload, currentUser) =>{
     const result = await OrderModel.find({})
     .populate("user_id")
     .populate("items.product_id")
-    .populate("shipping_address")
+    // .populate("shipping_address")
     .populate("payment_details")
     .exec()
     return result
@@ -98,7 +92,7 @@ const getOrderbyID = async (payload, currentUser) =>{
     const result = await OrderModel.findById({_id: payload.id})
     .populate("user_id")
     .populate("items.product_id")
-    .populate("shipping_address")
+    // .populate("shipping_address")
     .populate("payment_details")
     .exec()
     return result
@@ -159,10 +153,38 @@ const triggerStripe = async (stripeLineItems=[]) => {
     throw err;
   }
 };
+const getStripeDetails = async(payload) =>{
+  try{
+    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const result = await stripe.checkout.sessions.retrieve(payload.stripe_session_id)
+    return result
+  }catch(err){
+    throw err
+  }
+}
+const updateOrderbyID = async(payload) =>{
+  try{
+    const order = await OrderModel.findById({_id: new mongoose.Types.ObjectId(payload.order_id)})
+    const stripe_result = await getStripeDetails(payload)
+    console.log(stripe_result)
+    order.payment_status = stripe_result?.payment_status
+    const paymentData = await PaymentModel.findById({_id : order.payment_details})
+    paymentData.payment_information = stripe_result
+    await paymentData.save()
+    // console.log(order)
+    await order.save()
+    const result = order
+    return result
+  }catch(err){
+    throw err
+  }
+}
 
 module.exports = {
   createOrder,
   getOrderbyID,
   getAllOrders,
-  triggerStripe
+  triggerStripe,
+  getStripeDetails,
+  updateOrderbyID
 }
