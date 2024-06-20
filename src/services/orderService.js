@@ -71,7 +71,7 @@ const createOrder = async(payload , currentUser) =>{
 const getAllOrders = async (payload, currentUser) =>{
   try{
 
-    const result = await OrderModel.find({})
+    const result = await OrderModel.find({user_id : currentUser._id})
     .populate("user_id")
     .populate("items.product_id")
     // .populate("shipping_address")
